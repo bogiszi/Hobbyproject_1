@@ -35,34 +35,47 @@ public class Game {
                 }
             } while (!validInput);
             String answer = "";
-            for (Map.Entry<String, Integer> integerStringEntry : qAndA.getQuestionsAndAnswers().entrySet()) {
-                if (integerStringEntry.getValue().equals(difficultyInput)) {
-                    String[] questionAndAnswer = integerStringEntry.getKey().split(";");
-                    System.out.println(questionAndAnswer[0]);
-                    answer = questionAndAnswer[1];
-                    qAndA.removeQuestionAndAnswer(integerStringEntry.getKey());
-                    break;
-                }
-            }
+            answer = getQuestionAndSetAnswer(qAndA, difficultyInput, answer);
             boolean isGoodAnswer = checkAnswer(answer);
             countRound++;
-            if (isGoodAnswer) {
-                players.get(playerIndex).setPoint(players.get(playerIndex).getPoint() + difficultyInput);
-            }
-            if (players.get(playerIndex).getPoint() * 4 + 2 >= gameTableInput.getColumns() - 3) {
-                isEnd = true;
-                players.get(playerIndex).setPoint(((gameTableInput.getColumns() - 5) / 4));
-            }
-
+            isEnd = checkAndSetPoint(players, gameTableInput, playerIndex, isEnd, difficultyInput, isGoodAnswer);
             gameTableInput.printTable(players);
-
-            if (playerIndex == 0) {
-                playerIndex = 1;
-            } else {
-                playerIndex = 0;
-            }
+            playerIndex = changePlayer(playerIndex);
         } while (!isEnd || countRound % 2 != 0);
         checkAndDisplayWinnwer(players);
+    }
+
+    private String getQuestionAndSetAnswer(QuestionsAndAnswers qAndA, int difficultyInput, String answer) {
+        for (Map.Entry<String, Integer> integerStringEntry : qAndA.getQuestionsAndAnswers().entrySet()) {
+            if (integerStringEntry.getValue().equals(difficultyInput)) {
+                String[] questionAndAnswer = integerStringEntry.getKey().split(";");
+                System.out.println(questionAndAnswer[0]);
+                answer = questionAndAnswer[1];
+                qAndA.removeQuestionAndAnswer(integerStringEntry.getKey());
+                break;
+            }
+        }
+        return answer;
+    }
+
+    private boolean checkAndSetPoint(List<Player> players, Table gameTableInput, int playerIndex, boolean isEnd, int difficultyInput, boolean isGoodAnswer) {
+        if (isGoodAnswer) {
+            players.get(playerIndex).setPoint(players.get(playerIndex).getPoint() + difficultyInput);
+        }
+        if (players.get(playerIndex).getPoint() * 4 + 2 >= gameTableInput.getColumns() - 3) {
+            isEnd = true;
+            players.get(playerIndex).setPoint(((gameTableInput.getColumns() - 5) / 4));
+        }
+        return isEnd;
+    }
+
+    private int changePlayer(int playerIndex) {
+        if (playerIndex == 0) {
+            playerIndex = 1;
+        } else {
+            playerIndex = 0;
+        }
+        return playerIndex;
     }
 
 
@@ -73,7 +86,7 @@ public class Game {
             System.out.println("Szuper vagy!");
             return true;
         } else {
-            System.out.println("Nem jó a válasz.");
+            System.out.println("Nem jó a válasz.\nA helyes válasz: " + inputAnswer);
         }
         return false;
     }
