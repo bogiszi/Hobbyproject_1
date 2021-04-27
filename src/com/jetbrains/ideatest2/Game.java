@@ -1,7 +1,6 @@
 package com.jetbrains.ideatest2;
 
 
-
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -34,8 +33,7 @@ public class Game {
                     validInput = true;
                 }
             } while (!validInput);
-            String answer = "";
-            answer = getQuestionAndSetAnswer(qAndA, difficultyInput, answer);
+            String[] answer = getQuestionAndSetAnswer(qAndA, difficultyInput);
             boolean isGoodAnswer = checkAnswer(answer);
             countRound++;
             isEnd = checkAndSetPoint(players, gameTableInput, playerIndex, isEnd, difficultyInput, isGoodAnswer);
@@ -45,12 +43,24 @@ public class Game {
         checkAndDisplayWinnwer(players);
     }
 
-    private String getQuestionAndSetAnswer(QuestionsAndAnswers qAndA, int difficultyInput, String answer) {
+    private String[] getQuestionAndSetAnswer(QuestionsAndAnswers qAndA, int difficultyInput) {
+        String[] answer = new String[2];
         for (Map.Entry<String, Integer> integerStringEntry : qAndA.getQuestionsAndAnswers().entrySet()) {
             if (integerStringEntry.getValue().equals(difficultyInput)) {
                 String[] questionAndAnswer = integerStringEntry.getKey().split(";");
                 System.out.println(questionAndAnswer[0]);
-                answer = questionAndAnswer[1];
+                System.out.println(questionAndAnswer[2].charAt(0) + ": "
+                        + questionAndAnswer[2].substring(1) + ", " +
+                        questionAndAnswer[3].charAt(0) + ": "
+                        + questionAndAnswer[3].substring(1) +
+                        ", " + questionAndAnswer[4].charAt(0) + ": "
+                        + questionAndAnswer[4].substring(1));
+                answer[0] = questionAndAnswer[1];
+                for (int i = 2; i < questionAndAnswer.length; i++) {
+                    if (questionAndAnswer[i].substring(1).equals(questionAndAnswer[1])) {
+                        answer[1] = questionAndAnswer[i];
+                    }
+                }
                 qAndA.removeQuestionAndAnswer(integerStringEntry.getKey());
                 break;
             }
@@ -79,14 +89,14 @@ public class Game {
     }
 
 
-    public static boolean checkAnswer(String inputAnswer) {
+    public static boolean checkAnswer(String[] inputAnswers) {
         Scanner sc = new Scanner(System.in);
-        String playerAnswer = sc.nextLine();
-        if (playerAnswer.equals(inputAnswer)) {
+        char playerAnswer = sc.nextLine().charAt(0);
+        if (playerAnswer == inputAnswers[1].charAt(0)) {
             System.out.println("Szuper vagy!");
             return true;
         } else {
-            System.out.println("Nem jó a válasz.\nA helyes válasz: " + inputAnswer);
+            System.out.println("Nem jó a válasz.\nA helyes válasz: " + inputAnswers[0]);
         }
         return false;
     }

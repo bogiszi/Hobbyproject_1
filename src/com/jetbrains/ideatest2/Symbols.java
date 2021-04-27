@@ -4,6 +4,7 @@ public enum Symbols {
 //    BLACK("▬"),
 //    WHITE("▭"),
 
+
     DOT("@"),
     HASH("#"),
     CROSS("X"),

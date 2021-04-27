@@ -20,3 +20,4 @@ public enum TableChars {
         return symbol;
     }
 }
+
