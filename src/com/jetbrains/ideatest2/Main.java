@@ -17,5 +17,6 @@ public class Main {
         QuestionsAndAnswers qAndA = new QuestionsAndAnswers();
         newGame.playGame(list, qAndA, gameTable);
 
+
     }
 }

@@ -10,10 +10,12 @@ public class Game {
 
     public void gameDescription() {
 
+
         System.out.println("Döntsétek el, hány mezőből álljon a játéktábla\n" +
                 "és válasszatok, milyen nehézségű kérdést szeretnétek kapni (1-3).\n" +
                 "Ha jól válaszoltok, annyi mezőt léphettek előre a táblán." +
                 " Az nyer, aki először végigér a játéktáblán. Hajrá!");
+
     }
 
 
@@ -26,8 +28,9 @@ public class Game {
             boolean validInput = false;
             int difficultyInput = 0;
             do {
-                System.out.println(players.get(playerIndex).getName() + ", milyen nehéz kérdést szeretnél?");
-                System.out.println("1 - könnyű\n2 - közepes\n3 - nehéz");
+                System.out.println(GameController.TEXT_YELLOW + players.get(playerIndex).getName() +
+                        ", milyen nehéz kérdést szeretnél?" + GameController.TEXT_RESET);
+                System.out.println(GameController.TEXT_YELLOW + "1 - könnyű\n2 - közepes\n3 - nehéz" + GameController.TEXT_RESET);
                 difficultyInput = sc.nextInt();
                 if (difficultyInput == 1 || difficultyInput == 2 || difficultyInput == 3) {
                     validInput = true;
@@ -93,21 +96,24 @@ public class Game {
         Scanner sc = new Scanner(System.in);
         char playerAnswer = sc.nextLine().charAt(0);
         if (playerAnswer == inputAnswers[1].charAt(0)) {
-            System.out.println("Szuper vagy!");
+            System.out.println(GameController.TEXT_CYAN + "Szuper vagy!" + GameController.TEXT_RESET);
             return true;
         } else {
-            System.out.println("Nem jó a válasz.\nA helyes válasz: " + inputAnswers[0]);
+            System.out.println(GameController.TEXT_RED + "Nem jó a válasz.\nA helyes válasz: " +
+                    inputAnswers[0] + GameController.TEXT_RESET);
         }
         return false;
     }
 
     public static void checkAndDisplayWinnwer(List<Player> players) {
         if (players.get(0).getPoint() > players.get(1).getPoint()) {
-            System.out.println(players.get(0).getName() + " nyert! Gratulálok!");
+            System.out.println(GameController.TEXT_PURPLE + players.get(0).getName() +
+                    " nyert! Gratulálok!" + GameController.TEXT_RESET);
         } else if (players.get(1).getPoint() > players.get(0).getPoint()) {
-            System.out.println(players.get(1).getName() + " nyert! Gratulálok!");
+            System.out.println(GameController.TEXT_PURPLE + players.get(1).getName() +
+                    " nyert! Gratulálok!" + GameController.TEXT_RESET);
         } else {
-            System.out.println("A végeredmény: döntetlen!");
+            System.out.println(GameController.TEXT_PURPLE + "A végeredmény: döntetlen!" + GameController.TEXT_RESET);
         }
     }
 

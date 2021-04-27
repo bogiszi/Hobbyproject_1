@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class QuestionsAndAnswers {
 
+
     protected Map<String, Integer> questionsAndAnswers;
 
     public QuestionsAndAnswers() {
