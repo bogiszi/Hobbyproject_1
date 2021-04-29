@@ -4,34 +4,17 @@ import java.util.List;
 
 public class Table {
 
-    public static final String TEXT_RESET = "\u001B[0m";
-    public static final String TEXT_BLACK = "\u001B[30m";
-    public static final String TEXT_RED = "\u001B[31m";
-    public static final String TEXT_GREEN = "\u001B[32m";
-    public static final String TEXT_YELLOW = "\u001B[33m";
-    public static final String TEXT_BLUE = "\u001B[34m";
-    public static final String TEXT_PURPLE = "\u001B[35m";
-    public static final String TEXT_CYAN = "\u001B[36m";
-    public static final String TEXT_WHITE = "\u001B[37m";
-
-    public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
-    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
-    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
-    public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-    public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-    public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-
     protected int rows;
     protected int columns;
     protected String[][] board;
+    private boolean isStart;
 
 
     public Table(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
         this.board = new String[rows][columns];
+        this.isStart = true;
     }
 
     public int getRows() {
@@ -50,9 +33,16 @@ public class Table {
         this.board = board;
     }
 
+    public boolean isStart() {
+        return isStart;
+    }
 
-    public void printTable(List<Player> playersList) {
+    public void setStart(boolean start) {
+        isStart = start;
+    }
 
+    public String printTable(List<Player> playersList) {
+        String table = "";
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if ((i == 0 || i == board.length - 1) && j % 4 != 0) {
@@ -79,11 +69,11 @@ public class Table {
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                System.out.print(TEXT_BLACK + ANSI_BLUE_BACKGROUND + board[i][j] + TEXT_RESET);
+                table += board[i][j];
             }
-            System.out.println();
+            table += "\n";
 
         }
-
+        return table;
     }
 }
