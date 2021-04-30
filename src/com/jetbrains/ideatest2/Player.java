@@ -10,9 +10,8 @@ public class Player {
     protected String symbol;
     private boolean isActualPlayer;
     private int actualDifficulty;
+    private int steps;
 
-    public Player() {
-    }
 
     public Player(String name, boolean isActualPlayer) {
         this.name = name;
@@ -58,5 +57,13 @@ public class Player {
 
     public void setActualDifficulty(int actualDifficulty) {
         this.actualDifficulty = actualDifficulty;
+    }
+
+    public int getSteps() {
+        return steps;
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
     }
 }

@@ -79,10 +79,6 @@ public class QuestionsAndAnswers {
         return questionsAndAnswers;
     }
 
-    public void setQuestionsAndAnswers(Map<String, Integer> questionsAndAnswers) {
-        this.questionsAndAnswers = questionsAndAnswers;
-    }
-
     public void removeQuestionAndAnswer(String input) {
         questionsAndAnswers.remove(input);
     }

@@ -1,11 +1,21 @@
 package com.jetbrains.ideatest2;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import com.sun.javafx.tk.Toolkit;
+import com.sun.javafx.tk.FontMetrics;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,28 +38,36 @@ public class Scenes extends Application {
     }
 
     public Scene firstScene() {
-        Pane root = new Pane();
-        Label gameRules = new Label("Döntsétek el, hány mezőből álljon a játéktábla és válasszatok, " +
-                "milyen nehézségű kérdést szeretnétek kapni (1-3). Ha jól válaszoltok, annyi mezőt léphettek előre a táblán." +
-                "Az nyer, aki először végigér a játéktáblán. Hajrá!");
+        VBox root = new VBox(5);
+        Label gameRules1 = new Label("Döntsétek el, milyen nehézségű kérdést szeretnétek kapni (1-3).");
+        Label gameRules2 = new Label("Ha jól válaszoltok, annyi mezőt léphettek előre a táblán.");
+        Label gameRules3 = new Label("Az nyer, aki először végigér a 15 mezős játéktáblán. Hajrá!");
+        gameRules1.setStyle("-fx-font-size: 20px;");
+        gameRules2.setStyle("-fx-font-size: 20px;");
+        gameRules3.setStyle("-fx-font-size: 20px;");
         Button okButton = new Button("OK");
-        VBox vbox = new VBox(5);
-        vbox.getChildren().addAll(gameRules, okButton);
+        okButton.setPrefSize(60, 40);
+        root.getChildren().addAll(gameRules1, gameRules2, gameRules3, okButton);
+        root.setAlignment(Pos.CENTER);
         Player first = new Player("1", true);
         Player second = new Player("2", false);
         players.add(first);
         players.add(second);
         okButton.setOnAction(t -> stage.setScene(askSymbolSceneFirstPlayer()));
-        root.getChildren().addAll(vbox);
-        return new Scene(root);
+
+        return new Scene(root, 800, 400);
     }
 
     public Scene askSymbolSceneFirstPlayer() {
         VBox root = new VBox(5);
         Label symbolText = new Label("Add meg a neved és válassz szimbólumot!");
+        symbolText.setStyle("-fx-font-size: 20px;");
         Label playerText = new Label(players.get(0).getName() + ". játékos:");
+        playerText.setStyle("-fx-font-size: 20px;");
         TextField userField = new TextField();
+        userField.setMaxWidth(150);
         Button okButton = new Button("OK");
+        okButton.setPrefSize(60, 40);
         RadioButton radio1, radio2, radio3, radio4;
         radio1 = new RadioButton("@");
         radio2 = new RadioButton("X");
@@ -95,15 +113,20 @@ public class Scenes extends Application {
                 }
         );
         root.getChildren().addAll(symbolText, playerText, userField, radio1, radio2, radio3, radio4, okButton);
-        return new Scene(root);
+        root.setAlignment(Pos.CENTER);
+        return new Scene(root, 400, 300);
     }
 
     public Scene askSymbolSceneSecondPlayer(List<RadioButton> buttons) {
         VBox root = new VBox(5);
         Label symbolText = new Label("Add meg a neved és válassz szimbólumot!");
         Label playerText = new Label(players.get(1).getName() + ". játékos:");
+        playerText.setStyle("-fx-font-size: 20px;");
+        playerText.setStyle("-fx-font-size: 20px;");
         TextField userField = new TextField();
+        userField.setMaxWidth(150);
         Button okButton = new Button("OK");
+        okButton.setPrefSize(60, 40);
         RadioButton radio1, radio2, radio3;
         radio1 = buttons.get(0);
         radio2 = buttons.get(1);
@@ -135,31 +158,62 @@ public class Scenes extends Application {
                 }
         );
         root.getChildren().addAll(symbolText, playerText, userField, radio1, radio2, radio3, okButton);
-        return new Scene(root);
+        root.setAlignment(Pos.CENTER);
+        return new Scene(root, 400, 300);
     }
 
 
     public Scene drawTableScene() {
         Table gameTable = new Table(4, 61);
-        Pane root = new Pane();
         Label text = new Label("Aktuális állás:");
+        text.setFont(Font.font(java.awt.Font.MONOSPACED, 20));
+        text.setStyle("-fx-font-size: 20px;");
         Label table = new Label(gameTable.printTable(players));
-        Button okButton = new Button("Jöhet a kérdés!");
-        VBox vbox = new VBox(5);
-        vbox.getChildren().addAll(text, table, okButton);
-        if (players.get(0).isActualPlayer()) {
-            okButton.setOnAction(t -> stage.setScene(askdifficulty(players.get(0))));
+        table.setFont(Font.font(java.awt.Font.MONOSPACED, 30));
+        Button okButton;
+        VBox root = new VBox(5);
+
+        if ((players.get(0).getSteps() == players.get(1).getSteps()) &&
+                (players.get(0).getPoint() >= (gameTable.getColumns() - 5) / 4 &&
+                players.get(1).getPoint() >= (gameTable.getColumns() - 5) / 4)) {
+            okButton = new Button("Menjünk az eredményhirdetésre!");
+            okButton.setPrefSize(200, 40);
+            okButton.setOnAction(t -> stage.setScene(finalSceneEqual()));
+        } else if (players.get(0).getPoint() >= (gameTable.getColumns() - 5) / 4 &&
+                players.get(0).getSteps() == players.get(1).getSteps()) {
+            okButton = new Button("Menjünk az eredményhirdetésre!");
+            okButton.setPrefSize(200, 40);
+            okButton.setOnAction(t -> stage.setScene(finalScene(players.get(0))));
+        } else if (players.get(1).getPoint() >= (gameTable.getColumns() - 5) / 4 &&
+                players.get(0).getSteps() == players.get(1).getSteps()) {
+            okButton = new Button("Menjünk az eredményhirdetésre!");
+            okButton.setPrefSize(200, 40);
+            okButton.setOnAction(t -> stage.setScene(finalScene(players.get(1))));
         } else {
-            okButton.setOnAction(t -> stage.setScene(askdifficulty(players.get(1))));
+            if (players.get(0).isActualPlayer()) {
+                okButton = new Button("Jöhet a kérdés!");
+                okButton.setPrefSize(200, 40);
+                okButton.setOnAction(t -> stage.setScene(askdifficulty(players.get(0))));
+            } else {
+                okButton = new Button("Jöhet a kérdés!");
+                okButton.setPrefSize(200, 40);
+                okButton.setOnAction(t -> stage.setScene(askdifficulty(players.get(1))));
+            }
         }
-        root.getChildren().addAll(vbox);
-        return new Scene(root);
+        root.getChildren().addAll(text, table, okButton);
+        root.setAlignment(Pos.CENTER);
+        return new Scene(root, 1200, 500);
     }
+
+
+
 
     public Scene askdifficulty(Player actualPlayer) {
         VBox root = new VBox(5);
         Label text = new Label(actualPlayer.getName() + ", milyen nehéz kérdést szeretnél?");
+        text.setStyle("-fx-font-size: 20px;");
         Button okButton = new Button("OK");
+        okButton.setPrefSize(60, 40);
         RadioButton radio1, radio2, radio3;
         radio1 = new RadioButton("1");
         radio2 = new RadioButton("2");
@@ -189,14 +243,17 @@ public class Scenes extends Application {
                 }
         );
         root.getChildren().addAll(text, radio1, radio2, radio3, okButton);
-        return new Scene(root);
+        root.setAlignment(Pos.CENTER);
+        return new Scene(root, 400, 300);
     }
 
     public Scene quizQuestionScene(Player actualPlayer) {
         VBox root = new VBox(10);
         String[] questionAndAnswer = newGame.getQuestionAndAnswer(qAndA, actualPlayer.getActualDifficulty());
         Label userLabel = new Label(questionAndAnswer[0]);
-                Button okButton = new Button("OK");
+        userLabel.setStyle("-fx-font-size: 20px;");
+        Button okButton = new Button("OK");
+        okButton.setPrefSize(60, 40);
         RadioButton radio1, radio2, radio3;
         radio1 = new RadioButton(questionAndAnswer[2]);
         radio2 = new RadioButton(questionAndAnswer[3]);
@@ -216,6 +273,7 @@ public class Scenes extends Application {
 
         okButton.setOnAction(e ->
                 {
+                    actualPlayer.setSteps(actualPlayer.getSteps() + 1);
                     String answerAfterChecking = "";
                     if (radio1.isSelected()) {
                         okButton.setDisable(true);
@@ -223,7 +281,7 @@ public class Scenes extends Application {
                             answerAfterChecking += "Szuper vagy!";
                             actualPlayer.setPoint(actualPlayer.getPoint() + actualPlayer.getActualDifficulty());
                         } else {
-                            answerAfterChecking +="Nem jó a válasz! A helyes válasz: " + questionAndAnswer[1];
+                            answerAfterChecking += "Nem jó a válasz! A helyes válasz: " + questionAndAnswer[1];
                         }
                     }
                     if (radio2.isSelected()) {
@@ -232,7 +290,7 @@ public class Scenes extends Application {
                             answerAfterChecking += "Szuper vagy!";
                             actualPlayer.setPoint(actualPlayer.getPoint() + actualPlayer.getActualDifficulty());
                         } else {
-                            answerAfterChecking +="Nem jó a válasz! A helyes válasz: " + questionAndAnswer[1];
+                            answerAfterChecking += "Nem jó a válasz! A helyes válasz: " + questionAndAnswer[1];
                         }
                     }
                     if (radio3.isSelected()) {
@@ -241,7 +299,7 @@ public class Scenes extends Application {
                             answerAfterChecking += "Szuper vagy!";
                             actualPlayer.setPoint(actualPlayer.getPoint() + actualPlayer.getActualDifficulty());
                         } else {
-                            answerAfterChecking +="Nem jó a válasz! A helyes válasz: " + questionAndAnswer[1];
+                            answerAfterChecking += "Nem jó a válasz! A helyes válasz: " + questionAndAnswer[1];
                         }
                     }
 
@@ -258,31 +316,54 @@ public class Scenes extends Application {
         );
 
         root.getChildren().addAll(userLabel, radio1, radio2, radio3, okButton);
-        return new Scene(root);
+        root.setAlignment(Pos.CENTER);
+        return new Scene(root, 600, 300);
     }
 
     public Scene responseScene(String input) {
-        Label labelresponse = new Label(input);
+        Label responseLabel = new Label(input);
+        responseLabel.setStyle("-fx-font-size: 20px;");
         VBox root = new VBox(5);
         Button okButton = new Button("OK");
-        root.getChildren().addAll(labelresponse, okButton);
+        okButton.setPrefSize(60, 40);
+        root.getChildren().addAll(responseLabel, okButton);
         okButton.setOnAction(t -> stage.setScene(drawTableScene()));
-        return new Scene(root);
+        root.setAlignment(Pos.CENTER);
+        return new Scene(root, 500, 300);
+    }
+
+    public Scene finalSceneEqual() {
+        VBox root = new VBox(5);
+        Label text = new Label("Döntetlen lett! Gratulálok!");
+        text.setStyle("-fx-font-size: 20px;");
+        Button okButton = new Button("OK");
+        okButton.setPrefSize(60, 40);
+        okButton.setOnAction(t -> stage.close());
+
+
+        root.getChildren().addAll(text, okButton);
+        root.setAlignment(Pos.CENTER);
+        return new Scene(root, 400, 300);
+    }
+
+    public Scene finalScene(Player actualPlayer) {
+        VBox root = new VBox(5);
+        Label text = new Label(actualPlayer.getName() + " a nyertes! Gratulálok!");
+        text.setStyle("-fx-font-size: 20px;");
+        Button okButton = new Button("OK");
+        okButton.setPrefSize(60, 40);
+        okButton.setOnAction(t -> stage.close());
+
+
+        root.getChildren().addAll(text, okButton);
+        root.setAlignment(Pos.CENTER);
+        return new Scene(root, 400, 300);
+
     }
 
 
-
-
-
     public static void main(String[] args) {
-
-
         launch(args);
-
-
-//            newGame.playGame(list, qAndA, gameTable);
-
-
     }
 
 

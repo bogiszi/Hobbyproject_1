@@ -10,6 +10,8 @@ public enum TableChars {
     BOTTOM_T("┴"),
     UPPER_T("┬");
 
+
+
     private String symbol;
 
     TableChars(String symbol) {
