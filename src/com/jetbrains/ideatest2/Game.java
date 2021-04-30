@@ -1,9 +1,7 @@
 package com.jetbrains.ideatest2;
 
 
-import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Game {
 

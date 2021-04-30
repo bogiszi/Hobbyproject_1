@@ -7,15 +7,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import com.sun.javafx.tk.Toolkit;
-import com.sun.javafx.tk.FontMetrics;
-
+import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import java.awt.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +39,14 @@ public class Scenes extends Application {
 
     public Scene firstScene() {
         VBox root = new VBox(5);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         Label gameRules1 = new Label("Döntsétek el, milyen nehézségű kérdést szeretnétek kapni (1-3).");
         Label gameRules2 = new Label("Ha jól válaszoltok, annyi mezőt léphettek előre a táblán.");
         Label gameRules3 = new Label("Az nyer, aki először végigér a 15 mezős játéktáblán. Hajrá!");
         gameRules1.setStyle("-fx-font-size: 20px;");
         gameRules2.setStyle("-fx-font-size: 20px;");
         gameRules3.setStyle("-fx-font-size: 20px;");
+
         Button okButton = new Button("OK");
         okButton.setPrefSize(60, 40);
         root.getChildren().addAll(gameRules1, gameRules2, gameRules3, okButton);
@@ -60,6 +62,7 @@ public class Scenes extends Application {
 
     public Scene askSymbolSceneFirstPlayer() {
         VBox root = new VBox(5);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         Label symbolText = new Label("Add meg a neved és válassz szimbólumot!");
         symbolText.setStyle("-fx-font-size: 20px;");
         Label playerText = new Label(players.get(0).getName() + ". játékos:");
@@ -118,7 +121,9 @@ public class Scenes extends Application {
     }
 
     public Scene askSymbolSceneSecondPlayer(List<RadioButton> buttons) {
+
         VBox root = new VBox(5);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         Label symbolText = new Label("Add meg a neved és válassz szimbólumot!");
         Label playerText = new Label(players.get(1).getName() + ". játékos:");
         playerText.setStyle("-fx-font-size: 20px;");
@@ -131,9 +136,7 @@ public class Scenes extends Application {
         radio1 = buttons.get(0);
         radio2 = buttons.get(1);
         radio3 = buttons.get(2);
-
         okButton.setDisable(true);
-
         radio1.setOnAction(e -> okButton.setDisable(false));
         radio2.setOnAction(e -> okButton.setDisable(false));
         radio3.setOnAction(e -> okButton.setDisable(false));
@@ -164,6 +167,7 @@ public class Scenes extends Application {
 
 
     public Scene drawTableScene() {
+
         Table gameTable = new Table(4, 61);
         Label text = new Label("Aktuális állás:");
         text.setFont(Font.font(java.awt.Font.MONOSPACED, 20));
@@ -172,6 +176,7 @@ public class Scenes extends Application {
         table.setFont(Font.font(java.awt.Font.MONOSPACED, 30));
         Button okButton;
         VBox root = new VBox(5);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
 
         if ((players.get(0).getSteps() == players.get(1).getSteps()) &&
                 (players.get(0).getPoint() >= (gameTable.getColumns() - 5) / 4 &&
@@ -209,7 +214,9 @@ public class Scenes extends Application {
 
 
     public Scene askdifficulty(Player actualPlayer) {
+
         VBox root = new VBox(5);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         Label text = new Label(actualPlayer.getName() + ", milyen nehéz kérdést szeretnél?");
         text.setStyle("-fx-font-size: 20px;");
         Button okButton = new Button("OK");
@@ -218,9 +225,7 @@ public class Scenes extends Application {
         radio1 = new RadioButton("1");
         radio2 = new RadioButton("2");
         radio3 = new RadioButton("3");
-
         okButton.setDisable(true);
-
         radio1.setOnAction(e -> okButton.setDisable(false));
         radio2.setOnAction(e -> okButton.setDisable(false));
         radio3.setOnAction(e -> okButton.setDisable(false));
@@ -248,7 +253,9 @@ public class Scenes extends Application {
     }
 
     public Scene quizQuestionScene(Player actualPlayer) {
+
         VBox root = new VBox(10);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         String[] questionAndAnswer = newGame.getQuestionAndAnswer(qAndA, actualPlayer.getActualDifficulty());
         Label userLabel = new Label(questionAndAnswer[0]);
         userLabel.setStyle("-fx-font-size: 20px;");
@@ -259,17 +266,13 @@ public class Scenes extends Application {
         radio2 = new RadioButton(questionAndAnswer[3]);
         radio3 = new RadioButton(questionAndAnswer[4]);
         ToggleGroup question1 = new ToggleGroup();
-
         radio1.setToggleGroup(question1);
         radio2.setToggleGroup(question1);
         radio3.setToggleGroup(question1);
-
         okButton.setDisable(true);
-
         radio1.setOnAction(e -> okButton.setDisable(false));
         radio2.setOnAction(e -> okButton.setDisable(false));
         radio3.setOnAction(e -> okButton.setDisable(false));
-
 
         okButton.setOnAction(e ->
                 {
@@ -314,32 +317,36 @@ public class Scenes extends Application {
                 }
 
         );
-
         root.getChildren().addAll(userLabel, radio1, radio2, radio3, okButton);
         root.setAlignment(Pos.CENTER);
         return new Scene(root, 600, 300);
     }
 
     public Scene responseScene(String input) {
+
+        VBox root = new VBox(5);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         Label responseLabel = new Label(input);
         responseLabel.setStyle("-fx-font-size: 20px;");
-        VBox root = new VBox(5);
         Button okButton = new Button("OK");
         okButton.setPrefSize(60, 40);
         root.getChildren().addAll(responseLabel, okButton);
+
         okButton.setOnAction(t -> stage.setScene(drawTableScene()));
         root.setAlignment(Pos.CENTER);
         return new Scene(root, 500, 300);
     }
 
     public Scene finalSceneEqual() {
+
         VBox root = new VBox(5);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         Label text = new Label("Döntetlen lett! Gratulálok!");
         text.setStyle("-fx-font-size: 20px;");
         Button okButton = new Button("OK");
         okButton.setPrefSize(60, 40);
-        okButton.setOnAction(t -> stage.close());
 
+        okButton.setOnAction(t -> stage.close());
 
         root.getChildren().addAll(text, okButton);
         root.setAlignment(Pos.CENTER);
@@ -347,18 +354,19 @@ public class Scenes extends Application {
     }
 
     public Scene finalScene(Player actualPlayer) {
+
         VBox root = new VBox(5);
+        root.setBackground(new Background(new BackgroundFill(Color.DARKGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         Label text = new Label(actualPlayer.getName() + " a nyertes! Gratulálok!");
         text.setStyle("-fx-font-size: 20px;");
         Button okButton = new Button("OK");
         okButton.setPrefSize(60, 40);
-        okButton.setOnAction(t -> stage.close());
 
+        okButton.setOnAction(t -> stage.close());
 
         root.getChildren().addAll(text, okButton);
         root.setAlignment(Pos.CENTER);
         return new Scene(root, 400, 300);
-
     }
 
 
